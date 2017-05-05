@@ -57,10 +57,10 @@ export function addProject(project: Object, token: string, route: Array<String>)
     };
 }
 
-function appendToBuildLog(build, text) {
+function appendToBuildLog(data) {
     return {
         type: APPEND_TO_BUILD_LOG,
-        payload: { buildId: build.id, text: ansiToHtml(text) }
+        payload: data
     };
 }
 
@@ -77,19 +77,27 @@ export function fetchBuilds(pkg) {
 }
 
 // Fetch the build log for a package
-function fetchBuildLog(pkg, builds) {
+export function fetchBuildLog(id, token, start = 0) {
     return dispatch => {
-        builds.forEach(build => {
-            fakeApi.get(`log/${packageString(pkg)}/${build.id}.txt`).then(response => {
-                if (build.status === "running") {
-                    dispatch(simulateLogStream(build, response));
-                } else {
-                    dispatch(populateBuildLog(build.id, response));
+        new BuilderApiClient(token)
+            .getBuildLog(id, start)
+            .then((log) => {
+                console.log(id, start, log["content"].length);
+
+                if (start === 0) {
+                    dispatch(populateBuildLog(log));
                 }
-            }).catch(error => {
-                dispatch(populateBuildLog(build.id, undefined));
-            });
-        });
+                else {
+                    log["content"].forEach((line) => {
+                        setTimeout(() => { dispatch(appendToBuildLog({ content: [line] })); }, 10);
+                    });
+                }
+
+                if (!log["is_complete"]) {
+                    setTimeout(() => { dispatch(fetchBuildLog(id, token, log["stop"])); }, 1000);
+                }
+            })
+            .catch(error => console.error(error));
     };
 }
 
@@ -217,10 +225,10 @@ function populateBuilds(data) {
     };
 }
 
-export function populateBuildLog(id, data) {
+export function populateBuildLog(data) {
     return {
         type: POPULATE_BUILD_LOG,
-        payload: { id, data: data ? ansiToHtml(data) : undefined },
+        payload: data
     };
 }
 
@@ -245,26 +253,26 @@ function setProjects(projects) {
     };
 }
 
-function simulateLogStream(build, response) {
-    return dispatch => {
-        // This is where we simulate a streaming build
-        if (build.status === "running") {
-            const o = Observable.from(response.split("\n")).concatMap(x =>
-                Observable.of(x).delay((() => Math.floor(Math.random() * 300))())
-            );
-            o.subscribe(
-                x => dispatch(appendToBuildLog(build, x)),
-                e => console.error(e),
-                () => {
-                    dispatch(finishBuildStream(build));
-                    dispatch(addNotification({
-                        title: "Build Complete",
-                        type: SUCCESS,
-                        body: `Build ${packageString(build)}#${build.id} completed successfully.`,
-                    }));
-                }
-            );
-        }
+// function simulateLogStream(build, response) {
+//     return dispatch => {
+//         // This is where we simulate a streaming build
+//         if (build.status === "running") {
+//             const o = Observable.from(response.split("\n")).concatMap(x =>
+//                 Observable.of(x).delay((() => Math.floor(Math.random() * 300))())
+//             );
+//             o.subscribe(
+//                 x => dispatch(appendToBuildLog(build, x)),
+//                 e => console.error(e),
+//                 () => {
+//                     dispatch(finishBuildStream(build));
+//                     dispatch(addNotification({
+//                         title: "Build Complete",
+//                         type: SUCCESS,
+//                         body: `Build ${packageString(build)}#${build.id} completed successfully.`,
+//                     }));
+//                 }
+//             );
+//         }
 
-    };
-}
+//     };
+// }

@@ -42,7 +42,7 @@ impl Default for Config {
         Config {
             shards: (0..SHARD_COUNT).collect(),
             worker_threads: Self::default_worker_count(),
-            migration_path: String::from("/hab/svc/builder-scheduler/pkgs"),
+            migration_path: String::from("/src/hab/svc/hab-builder-api/data/pkgs"),
             routers: vec![RouterAddr::default()],
             datastore: datastore,
         }

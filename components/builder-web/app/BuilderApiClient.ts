@@ -116,6 +116,21 @@ export class BuilderApiClient {
         });
     }
 
+    public getBuildLog(jobId: string, start: number) {
+        return new Promise((resolve, reject) => {
+            fetch(`${this.urlPrefix}/jobs/${jobId}/log?start=${start}`, {
+                method: "GET",
+                headers: this.headers
+            }).then(response => {
+                if (response.ok) {
+                    resolve(response.json());
+                } else {
+                    reject(new Error(response.statusText));
+                }
+            }).catch(error => reject(error));
+        });
+    }
+
     public getProject(projectId) {
         return new Promise((resolve, reject) => {
             fetch(`${this.urlPrefix}/projects/${projectId}`, {

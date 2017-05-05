@@ -12,13 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {List, Map, Record} from "immutable";
-import {Origin} from "./records/Origin";
+import { List, Map, Record } from "immutable";
+import { Build } from "./records/Build";
+import { Origin } from "./records/Origin";
 
 export default Record({
     app: Record({
         name: "Habitat",
         currentYear: new Date().getFullYear(),
+        thing: "anotherthing"
+    })(),
+    builds: Record({
+        visible: List(),
+        selected: Build()
     })(),
     gitHub: Record({
         authState: undefined,
@@ -140,19 +146,45 @@ export default Record({
         hint: {},
         current: Record({
             id: undefined,
+            name: undefined,
+            origin_id: undefined,
+            origin_name: undefined,
+            owner_id: undefined,
+            package_name: undefined,
             plan_path: undefined,
-            description: undefined,
-            latestBuild: undefined,
-            sourceUrl: undefined,
-            maintainer: Record({
+            vcs_data: undefined,
+            vcs_type: undefined,
 
+            // description: undefined,
+            // latestBuild: undefined,
+            // sourceUrl: undefined,
+            // maintainer: Record({
+
+            // })(),
+            // vcs: Record({
+            //     type: "git",
+            //     url: undefined
+            // }),
+
+            builds: List([
+                {
+                    id: "710275386524647424",
+                    status: "success",
+                    origin: "core",
+                    name: "nginx",
+                    version: "0.0.0",
+                    release: "20170101010101",
+                    author: "Chris Nunciato",
+                    startTime: new Date(),
+                    duration: 8276387
+                }
+            ]),
+            buildLog: Record({
+                start: undefined,
+                stop: undefined,
+                content: undefined,
+                is_complete: undefined
             })(),
-            vcs: Record({
-                type: "git",
-                url: undefined
-            }),
-            builds: List(),
-            buildLogs: Map(),
             ui: Record({
                 exists: false,
                 loading: true,

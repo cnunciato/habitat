@@ -1,0 +1,12 @@
+.hab-package-build {
+
+  .output {
+    font-family: $monospace-font-family;
+    font-size: $monospace-font-size;
+    @include pad($base-spacing);
+    background: $hab-gray-dark;
+    border-radius: $global-radius;
+    color: $medium-gray;
+    overflow: auto;
+  }
+}

@@ -37,6 +37,8 @@ import { OrganizationCreatePageComponent } from "./organization-create-page/Orga
 import { OrganizationMembersComponent } from "./organization-members/OrganizationMembersComponent";
 import { OrganizationsPageComponent } from "./organizations-page/OrganizationsPageComponent";
 import { PackageBreadcrumbsComponent } from "./PackageBreadcrumbsComponent";
+import { PackageBuildComponent } from "./package-build/package-build.component";
+import { PackageBuildListComponent } from "./package-build-list/package-build-list.component";
 import { PackagePageComponent } from "./package-page/PackagePageComponent";
 import { PackageInfoComponent } from "./package-info/PackageInfoComponent";
 import { PackageListComponent } from "./package-page/PackageListComponent";
@@ -82,6 +84,8 @@ import { UserNavComponent } from "./header/user-nav/UserNavComponent";
         OrganizationMembersComponent,
         OrganizationsPageComponent,
         PackageBreadcrumbsComponent,
+        PackageBuildComponent,
+        PackageBuildListComponent,
         PackageListComponent,
         PackageInfoComponent,
         PackagePageComponent,

@@ -21,6 +21,8 @@ import { OrganizationCreatePageComponent } from "./organization-create-page/Orga
 import { OrganizationsPageComponent } from "./organizations-page/OrganizationsPageComponent";
 import { PackagePageComponent } from "./package-page/PackagePageComponent";
 import { PackagesPageComponent } from "./packages-page/PackagesPageComponent";
+import { PackageBuildComponent } from "./package-build/package-build.component";
+import { PackageBuildListComponent } from "./package-build-list/package-build-list.component";
 import { ProjectCreatePageComponent } from "./project-create-page/ProjectCreatePageComponent";
 import { ProjectPageComponent } from "./project-page/ProjectPageComponent";
 import { ProjectsPageComponent } from "./projects-page/ProjectsPageComponent";
@@ -73,6 +75,14 @@ export const routes: Routes = [
     {
         path: "pkgs/:origin/:name",
         component: PackagesPageComponent,
+    },
+    {
+        path: "pkgs/core/:name/builds",
+        component: PackageBuildListComponent
+    },
+    {
+        path: "pkgs/core/:name/builds/:id",
+        component: PackageBuildComponent
     },
     {
         path: "pkgs/:origin/:name/:version",

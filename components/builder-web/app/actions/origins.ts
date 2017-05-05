@@ -166,7 +166,7 @@ export function inviteUserToOrigin(username: string, origin: string, token: stri
 function populateMyOrigins(payload, error = undefined) {
     return {
         type: POPULATE_MY_ORIGINS,
-        payload,
+        payload: payload.reverse(),
         error
     };
 }

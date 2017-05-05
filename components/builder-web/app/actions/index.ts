@@ -159,6 +159,7 @@ export const getUniquePackages = packageActions.getUniquePackages;
 
 export const addProject = projectActions.addProject;
 export const fetchBuilds = projectActions.fetchBuilds;
+export const fetchBuildLog = projectActions.fetchBuildLog;
 export const fetchProject = projectActions.fetchProject;
 export const fetchProjects = projectActions.fetchProjects;
 export const fetchProjectsForPackages = projectActions.fetchProjectsForPackages;
