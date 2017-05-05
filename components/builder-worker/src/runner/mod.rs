@@ -215,6 +215,9 @@ impl Runner {
         let mut child = Command::new(command)
             .args(&args)
             .env_clear()
+            // This disables download progress bars; otherwise we have
+            // to filter out loads of carriage returns!
+            .env("HAB_NONINTERACTIVE", "true")
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()

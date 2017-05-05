@@ -27,8 +27,9 @@ use hab_net::routing::Broker;
 use iron::prelude::*;
 use iron::status;
 use iron::typemap;
+use params::{Params, Value};
 use persistent;
-use protocol::jobsrv::{Job, JobGet, JobSpec};
+use protocol::jobsrv::{Job, JobGet, JobLogGet, JobLog, JobSpec};
 use protocol::originsrv::*;
 use protocol::sessionsrv;
 use protocol::net::{self, NetOk, ErrCode};
@@ -147,6 +148,33 @@ pub fn job_show(req: &mut Request) -> IronResult<Response> {
         Ok(job) => Ok(render_json(status::Ok, &job)),
         Err(err) => Ok(render_net_error(&err)),
     }
+}
+
+pub fn job_log(req: &mut Request) -> IronResult<Response> {
+    let start = {
+        let params = req.get_ref::<Params>().unwrap();
+        match params.find(&["start"]) {
+            Some(&Value::String(ref val)) => val.parse::<u64>().unwrap(),
+            _ => 0
+        }
+    };
+
+    let params = req.extensions.get::<Router>().unwrap();
+    let id = match params.find("id").unwrap().parse::<u64>() {
+        Ok(id) => id,
+        Err(_) => return Ok(Response::with(status::BadRequest)),
+    };
+    let mut conn = Broker::connect().unwrap();
+
+    let mut request = JobLogGet::new();
+    request.set_id(id);
+    request.set_start(start);
+
+    match conn.route::<JobLogGet, JobLog>(&request) {
+        Ok(log) => Ok(render_json(status::Ok, &log)),
+        Err(err) => Ok(render_net_error(&err))
+    }
+
 }
 
 /// Endpoint for determining availability of builder-api components.

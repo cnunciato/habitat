@@ -27,6 +27,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate toml;
 extern crate zmq;
+extern crate habitat_builder_protocol;
 
 pub mod config;
 pub mod error;
@@ -34,6 +35,7 @@ pub mod heartbeat;
 pub mod runner;
 pub mod server;
 pub mod vcs;
+pub mod logger;
 
 pub use self::config::Config;
 pub use self::error::{Error, Result};
